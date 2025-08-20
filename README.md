@@ -70,8 +70,8 @@ In fast‑paced classes, **taking attendance** eats time and breaks momentum. Te
 
 ```bash
 # 1) Clone and enter
-git clone <your-repo-url>.git
-cd <your-repo-folder>
+git clone Kunal1703.git
+cd C:\Users\kunal\Downloads\peroject\ruchuuu>
 
 # 2) (Recommended) Create & activate a virtual env
 python -m venv venv
@@ -121,7 +121,7 @@ Then open: `http://127.0.0.1:5500/index.html`
    **Only the quiz** uses this yes/no prompt.
 
 4. **Attendance stats**  
-   Click **Stats** to view today’s counts.
+   Click **Stats** to view today’s students counts.
 
 5. **Feedback**  
    Click **Feedback** → type your message → it’s saved locally.

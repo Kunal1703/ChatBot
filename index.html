@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Attendance Bot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    #chatbot {
+      width: 90%;
+      max-width: 400px;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      border: 2px solid #09142D;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    #chat-header {
+      background-color: #09142D;
+      color: whitesmoke;
+      text-align: center;
+      padding: 15px;
+      font-weight: bold;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 18px;
+    }
+
+    #chat-window {
+      height: 420px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-top: 1px solid #ddd;
+      border-bottom: 1px solid #ddd;
+    }
+
+    #messages {
+      padding: 10px;
+      height: 100%;
+      overflow-y: auto;
+      font-size: 14px;
+    }
+
+    .message {
+      margin: 8px 0;
+      padding: 10px 14px;
+      border-radius: 18px;
+      max-width: 75%;
+      word-wrap: break-word;
+      opacity: 0;
+      animation: fadeIn 0.3s forwards;
+    }
+
+    .message.bot {
+      background: #e5e5ea;
+      color: #000;
+      text-align: left;
+      align-self: flex-start;
+    }
+
+    .message.user {
+      background: #1a73e8;
+      color: #fff;
+      text-align: right;
+      align-self: flex-end;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    #input-area {
+      display: flex;
+      border-top: 1px solid #ddd;
+    }
+
+    #userInput {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      font-size: 14px;
+    }
+
+    button {
+      background-color: rgb(0,29,128);
+      color: white;
+      border: none;
+      padding: 0 15px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background-color: rgb(0,20,90);
+    }
+
+    #quick-actions {
+      padding: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    #quick-actions button {
+      background-color: rgba(25, 183, 223, 0.6);
+      color: #09142D;
+      padding: 8px 12px;
+      font-size: 13px;
+      border-radius: 6px;
+    }
+
+    #typing {
+      font-style: italic;
+      font-size: 12px;
+      color: gray;
+      margin: 4px 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="chatbot">
+    <div id="chat-header">Edugenie SRMIST</div>
+    <div id="chat-window">
+      <div id="messages"></div>
+      <div id="typing" style="display:none;">Bot is typing...</div>
+      <div id="input-area">
+        <input type="text" id="userInput" placeholder="Type a message..." />
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+    <div id="quick-actions">
+      <button onclick="sendMessageFromButton('Mark my attendance')">✅ Mark Attendance</button>
+      <button onclick="sendMessageFromButton('Start quiz')">📝 Start Quiz</button>
+      <button onclick="sendMessageFromButton('Show attendance stats')">📊 Stats</button>
+      <button onclick="sendMessageFromButton('Give feedback')">💬 Feedback</button>
+    </div>
+  </div>
+
+  <script>
+  const messagesDiv = document.getElementById("messages");
+  const userInput = document.getElementById("userInput");
+  const typingDiv = document.getElementById("typing");
+
+  function addMessage(text, sender) {
+    const msg = document.createElement("div");
+    msg.classList.add("message", sender);
+    msg.innerHTML = text;  // allow HTML responses from Flask
+    messagesDiv.appendChild(msg);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  }
+
+  async function botReply(userText) {
+    typingDiv.style.display = "block";
+    try {
+      const res = await fetch("http://127.0.0.1:5000/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userText })
+      });
+      const data = await res.json();
+      typingDiv.style.display = "none";
+      addMessage(data.response, "bot");
+    } catch (err) {
+      typingDiv.style.display = "none";
+      addMessage("⚠️ Error connecting to server.", "bot");
+      console.error(err);
+    }
+  }
+
+  function sendMessage() {
+    const text = userInput.value.trim();
+    if (text === "") return;
+    addMessage(text, "user");
+    userInput.value = "";
+    botReply(text);
+  }
+
+  function sendMessageFromButton(text) {
+    addMessage(text, "user");
+    botReply(text);
+  }
+
+  userInput.addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+      sendMessage();
+    }
+  });
+</script>
+
+</body>
+</html>

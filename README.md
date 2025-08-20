@@ -57,19 +57,12 @@ In fast‑paced classes, **taking attendance** eats time and breaks momentum. Te
 ├── app.py                   # Flask backend (attendance, quiz, feedback)
 ├── classroom.db             # SQLite DB (auto‑created)
 ├── index.html               # Frontend UI (buttons + chat)
-├── assets/
-│   ├── duck2.jpeg           # background
-│   └── ding.jpeg            # panel background
-├── screenshots/             # <-- add your screenshots here
-│   ├── home.png
-│   ├── quiz.png
-│   └── attendance.png
+├── screenshots/             # Screenshots here
+│── screenshots/home.png
+│── screenshots/quiz.png
+│── screenshots/attendance.png
 └── README.md
 ```
-
-> If your images are elsewhere, update the `index.html` paths accordingly.
-
----
 
 ## ⚙️ Setup & Run (Local)
 

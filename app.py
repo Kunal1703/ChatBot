@@ -1,11 +1,10 @@
-import os
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 import sqlite3
 import random
 from datetime import datetime
 
-app = Flask(__name__, static_folder="static", static_url_path="")
+app = Flask(__name__)
 CORS(app)
 
 # ============ DATABASE ============
@@ -293,12 +292,5 @@ def attendance(date):
     return jsonify({"attendance": [{"student": r[0], "status": r[1]} for r in rows]})
 
 # ============ RUN ============
-@app.route("/")
-def index():
-    # send index.html from /static
-    return app.send_static_file("index.html")
-
 if __name__ == "__main__":
-    # When running locally you can still do: python app.py
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port, debug=True)
+    app.run(port=5000, debug=True)
